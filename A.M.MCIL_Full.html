@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A.M.MCIL</title>
+<style>
+body{font-family:tahoma;background:#111;color:#fff;text-align:center;margin:0}
+header{background:#222;padding:15px}
+button{padding:10px;margin:4px;border:none;border-radius:8px;font-size:16px}
+#click{width:180px;height:180px;border-radius:50%;font-size:30px}
+.panel{background:#1c1c1c;margin:10px;padding:10px;border-radius:12px}
+</style>
+</head>
+<body>
+<header>
+<h1>🔥 A.M.MCIL 🔥</h1>
+<h2>🪙 سکه: <span id="coins">0</span></h2>
+<h3>⭐ لول: <span id="level">1</span></h3>
+<h3>⚡ قدرت: <span id="power">1</span></h3>
+</header>
+
+<button id="click" onclick="clickCoin()">🪙</button>
+
+<div class="panel">
+<button onclick="buyUpgrade()">ارتقای کلیک (1000)</button>
+<button onclick="buyAuto()">اتوکلیکر (9000)</button>
+<button onclick="buyPro()">PRO (100000)</button>
+<button onclick="buyVIP()">VIP (100000000)</button>
+<button onclick="buyLegend()">اسکین لجندری (500000)</button>
+<button onclick="dailySpin()">🎰 چرخونه روزانه</button>
+<button onclick="resetGame()">🗑 ریست</button>
+</div>
+
+<script>
+let coins=+localStorage.coins||0;
+let power=+localStorage.power||1;
+let level=+localStorage.level||1;
+let auto=localStorage.auto==="true";
+let pro=localStorage.pro==="true";
+let vip=localStorage.vip==="true";
+let legend=localStorage.legend==="true";
+
+function save(){
+localStorage.coins=coins;
+localStorage.power=power;
+localStorage.level=level;
+localStorage.auto=auto;
+localStorage.pro=pro;
+localStorage.vip=vip;
+localStorage.legend=legend;
+}
+
+function update(){
+coins=Math.floor(coins);
+document.getElementById("coins").textContent=coins;
+document.getElementById("power").textContent=power;
+document.getElementById("level").textContent=level;
+}
+
+function clickCoin(){
+let gain=power;
+if(pro) gain*=10;
+coins+=gain;
+if(coins>=level*1000){level++;}
+save();update();
+}
+
+function poor(){alert("پول نداری فقیر🔥");}
+
+function buyUpgrade(){
+if(coins<1000)return poor();
+coins-=1000; power++; save(); update();
+}
+
+function buyAuto(){
+if(coins<9000)return poor();
+coins-=9000; auto=true; save(); update();
+}
+
+function buyPro(){
+if(coins<100000)return poor();
+coins-=100000; pro=true; save(); update();
+}
+
+function buyVIP(){
+if(coins<100000000)return poor();
+coins-=100000000; vip=true; power=10000000; save(); update();
+}
+
+function buyLegend(){
+if(coins<500000)return poor();
+coins-=500000; legend=true;
+document.body.style.background="linear-gradient(45deg,gold,orange,red)";
+save(); update();
+}
+
+function dailySpin(){
+let t=new Date().toDateString();
+if(localStorage.spin===t){
+alert("زدی چرخونه رو! فردا بیا");
+return;
+}
+let rewards=[1000,5000,10000,50000,100000];
+let r=rewards[Math.floor(Math.random()*rewards.length)];
+coins+=r;
+localStorage.spin=t;
+alert("جایزه: "+r);
+save(); update();
+}
+
+setInterval(()=>{
+if(auto){
+coins+=pro?power*10:power;
+save(); update();
+}
+},1000);
+
+function resetGame(){
+localStorage.clear();
+location.reload();
+}
+
+if(legend){
+document.body.style.background="linear-gradient(45deg,gold,orange,red)";
+}
+update();
+</script>
+</body>
+</html>
